@@ -32,3 +32,20 @@ df["bmi_group"] = pd.cut(
 print("\nMean charges by smoker and BMI group:")
 print(df.pivot_table(values="charges", index="bmi_group", columns="smoker", aggfunc="mean", observed=True).round(0))
 
+# ---------------- Figures ----------------
+section("Figures")
+colors = {"no": "tab:blue", "yes": "tab:red"}
+
+# 1. distribution of charges
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.hist(df["charges"], bins=40, color="tab:purple", edgecolor="white")
+ax.set_title("Distribution of insurance charges")
+ax.set_xlabel("Charges")
+ax.set_ylabel("Count")
+save_fig(fig, "insurance_charges_hist.png")
+
+# 2. smoker vs non-smoker
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.boxplot([df[df.smoker == "no"]["charges"], df[df.smoker == "yes"]["charges"]])
+ax.set_xticks([1, 2], ["Non-smoker", "Smoker"])
+ax.set_title("Charges by smoking status")
