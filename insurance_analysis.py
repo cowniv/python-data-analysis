@@ -49,3 +49,20 @@ fig, ax = plt.subplots(figsize=(6, 4))
 ax.boxplot([df[df.smoker == "no"]["charges"], df[df.smoker == "yes"]["charges"]])
 ax.set_xticks([1, 2], ["Non-smoker", "Smoker"])
 ax.set_title("Charges by smoking status")
+ax.set_ylabel("Charges")
+save_fig(fig, "insurance_smoker_box.png")
+
+# 3. BMI vs charges, coloured by smoker
+fig, ax = plt.subplots(figsize=(7, 5))
+for status, group in df.groupby("smoker"):
+    ax.scatter(group["bmi"], group["charges"], s=12, alpha=0.6, c=colors[status], label=f"smoker = {status}")
+ax.axvline(30, color="gray", linestyle="--", linewidth=1)
+ax.text(30.5, df["charges"].max() * 0.95, "BMI 30 (obese)", color="gray")
+ax.set_title("BMI vs charges")
+ax.set_xlabel("BMI")
+ax.set_ylabel("Charges")
+ax.legend()
+save_fig(fig, "insurance_bmi_scatter.png")
+
+# 4. age vs charges
+fig, ax = plt.subplots(figsize=(7, 5))
