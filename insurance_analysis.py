@@ -66,3 +66,20 @@ save_fig(fig, "insurance_bmi_scatter.png")
 
 # 4. age vs charges
 fig, ax = plt.subplots(figsize=(7, 5))
+for status, group in df.groupby("smoker"):
+    ax.scatter(group["age"], group["charges"], s=12, alpha=0.6, c=colors[status], label=f"smoker = {status}")
+ax.set_title("Age vs charges")
+ax.set_xlabel("Age")
+ax.set_ylabel("Charges")
+ax.legend()
+save_fig(fig, "insurance_age_scatter.png")
+
+# ---------------- Linear regression ----------------
+section("Linear regression")
+X = pd.get_dummies(df[["age", "sex", "bmi", "children", "smoker", "region"]], drop_first=True, dtype=int)
+y = df["charges"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model A: all features
+model = LinearRegression().fit(X_train, y_train)
+pred = model.predict(X_test)
