@@ -83,3 +83,20 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Model A: all features
 model = LinearRegression().fit(X_train, y_train)
 pred = model.predict(X_test)
+regression_report(y_test, pred, "all features")
+
+print("\n  Coefficients (charge change per unit):")
+coefs = pd.Series(model.coef_, index=X.columns).sort_values(key=abs, ascending=False)
+for name, value in coefs.items():
+    print(f"    {name:<20} {value:>10,.0f}")
+
+# Model B: add smoker x BMI interaction (obese smokers jump up a lot in the scatter plot)
+X2 = X.copy()
+X2["smoker_bmi"] = X2["smoker_yes"] * X2["bmi"]
+X2_train, X2_test = X2.loc[X_train.index], X2.loc[X_test.index]
+model2 = LinearRegression().fit(X2_train, y_train)
+pred2 = model2.predict(X2_test)
+print()
+regression_report(y_test, pred2, "with smoker x BMI")
+
+actual_vs_predicted(y_test, pred2, "Insurance charges: actual vs predicted", "insurance_actual_vs_pred.png")
