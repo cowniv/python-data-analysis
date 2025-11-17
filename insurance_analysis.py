@@ -49,3 +49,54 @@ fig, ax = plt.subplots(figsize=(6, 4))
 ax.boxplot([df[df.smoker == "no"]["charges"], df[df.smoker == "yes"]["charges"]])
 ax.set_xticks([1, 2], ["Non-smoker", "Smoker"])
 ax.set_title("Charges by smoking status")
+ax.set_ylabel("Charges")
+save_fig(fig, "insurance_smoker_box.png")
+
+# 3. BMI vs charges, coloured by smoker
+fig, ax = plt.subplots(figsize=(7, 5))
+for status, group in df.groupby("smoker"):
+    ax.scatter(group["bmi"], group["charges"], s=12, alpha=0.6, c=colors[status], label=f"smoker = {status}")
+ax.axvline(30, color="gray", linestyle="--", linewidth=1)
+ax.text(30.5, df["charges"].max() * 0.95, "BMI 30 (obese)", color="gray")
+ax.set_title("BMI vs charges")
+ax.set_xlabel("BMI")
+ax.set_ylabel("Charges")
+ax.legend()
+save_fig(fig, "insurance_bmi_scatter.png")
+
+# 4. age vs charges
+fig, ax = plt.subplots(figsize=(7, 5))
+for status, group in df.groupby("smoker"):
+    ax.scatter(group["age"], group["charges"], s=12, alpha=0.6, c=colors[status], label=f"smoker = {status}")
+ax.set_title("Age vs charges")
+ax.set_xlabel("Age")
+ax.set_ylabel("Charges")
+ax.legend()
+save_fig(fig, "insurance_age_scatter.png")
+
+# ---------------- Linear regression ----------------
+section("Linear regression")
+X = pd.get_dummies(df[["age", "sex", "bmi", "children", "smoker", "region"]], drop_first=True, dtype=int)
+y = df["charges"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model A: all features
+model = LinearRegression().fit(X_train, y_train)
+pred = model.predict(X_test)
+regression_report(y_test, pred, "all features")
+
+print("\n  Coefficients (charge change per unit):")
+coefs = pd.Series(model.coef_, index=X.columns).sort_values(key=abs, ascending=False)
+for name, value in coefs.items():
+    print(f"    {name:<20} {value:>10,.0f}")
+
+# Model B: add smoker x BMI interaction (obese smokers jump up a lot in the scatter plot)
+X2 = X.copy()
+X2["smoker_bmi"] = X2["smoker_yes"] * X2["bmi"]
+X2_train, X2_test = X2.loc[X_train.index], X2.loc[X_test.index]
+model2 = LinearRegression().fit(X2_train, y_train)
+pred2 = model2.predict(X2_test)
+print()
+regression_report(y_test, pred2, "with smoker x BMI")
+
+actual_vs_predicted(y_test, pred2, "Insurance charges: actual vs predicted", "insurance_actual_vs_pred.png")
