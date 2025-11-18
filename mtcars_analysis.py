@@ -44,3 +44,18 @@ ax.set_xlabel("Weight (1000 lbs)")
 ax.set_ylabel("MPG")
 ax.set_title("MPG vs weight")
 ax.legend()
+save_fig(fig, "mtcars_mpg_vs_wt.png")
+
+# only 32 cars, so use 5-fold cross-validation instead of one small test split
+for features in (["wt"], ["wt", "hp"], ["wt", "hp", "cyl", "am"]):
+    pred = cross_val_predict(LinearRegression(), df[features], y, cv=5)
+    regression_report(y, pred, f"{'+'.join(features):<14} (5-fold CV)")
+
+best = ["wt", "hp"]
+pred = cross_val_predict(LinearRegression(), df[best], y, cv=5)
+actual_vs_predicted(y, pred, "MPG: actual vs predicted (wt + hp)", "mtcars_actual_vs_pred.png")
+
+# ---------------- K-means ----------------
+section("K-means clustering")
+features = ["mpg", "hp", "wt", "qsec"]
+X = StandardScaler().fit_transform(df[features])  # scale so hp doesn't dominate
