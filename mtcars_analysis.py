@@ -59,3 +59,18 @@ actual_vs_predicted(y, pred, "MPG: actual vs predicted (wt + hp)", "mtcars_actua
 section("K-means clustering")
 features = ["mpg", "hp", "wt", "qsec"]
 X = StandardScaler().fit_transform(df[features])  # scale so hp doesn't dominate
+
+# elbow method
+inertias = []
+ks = range(1, 9)
+for k in ks:
+    inertias.append(KMeans(n_clusters=k, n_init=10, random_state=42).fit(X).inertia_)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.plot(list(ks), inertias, "o-")
+ax.set_xlabel("k")
+ax.set_ylabel("Inertia")
+ax.set_title("Elbow method")
+save_fig(fig, "mtcars_elbow.png")
+
+kmeans = KMeans(n_clusters=3, n_init=10, random_state=42).fit(X)
