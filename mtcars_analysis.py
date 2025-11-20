@@ -74,3 +74,18 @@ ax.set_title("Elbow method")
 save_fig(fig, "mtcars_elbow.png")
 
 kmeans = KMeans(n_clusters=3, n_init=10, random_state=42).fit(X)
+df["cluster"] = kmeans.labels_
+print(df.groupby("cluster")[features + ["cyl"]].mean().round(1))
+for c in sorted(df["cluster"].unique()):
+    names = ", ".join(df[df.cluster == c].index[:5])
+    print(f"  cluster {c}: {names}...")
+
+fig, ax = plt.subplots(figsize=(7, 5))
+scatter = ax.scatter(df["hp"], df["mpg"], c=df["cluster"], cmap="viridis", s=60)
+for name, row in df.iterrows():
+    ax.annotate(name, (row["hp"], row["mpg"]), fontsize=6, alpha=0.7)
+ax.set_xlabel("Horsepower")
+ax.set_ylabel("MPG")
+ax.set_title("K-means clusters (k=3)")
+ax.legend(*scatter.legend_elements(), title="cluster")
+save_fig(fig, "mtcars_kmeans.png")
