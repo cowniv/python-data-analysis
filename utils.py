@@ -18,3 +18,13 @@ def load_csv(name):
     df = pd.read_csv(DATA_DIR / name)
     print(f"\n=== {name}: {df.shape[0]} rows x {df.shape[1]} columns ===")
     print(df.head())
+    missing = df.isna().sum().sum()
+    print(f"Missing values: {missing}")
+    return df
+
+
+def section(title):
+    print("\n" + "-" * 60)
+    print(title)
+    print("-" * 60)
+
