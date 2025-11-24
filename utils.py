@@ -28,3 +28,13 @@ def section(title):
     print(title)
     print("-" * 60)
 
+
+def save_fig(fig, filename):
+    """Save a figure into figures/ and close it."""
+    FIG_DIR.mkdir(exist_ok=True)
+    path = FIG_DIR / filename
+    fig.tight_layout()
+    fig.savefig(path, dpi=120)
+    plt.close(fig)
+    print(f"  saved {path.relative_to(ROOT)}")
+
