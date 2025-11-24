@@ -48,3 +48,13 @@ def regression_report(y_true, y_pred, label="model"):
     return {"r2": r2, "mae": mae, "rmse": rmse}
 
 
+def actual_vs_predicted(y_true, y_pred, title, filename):
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.scatter(y_true, y_pred, alpha=0.6, edgecolor="white")
+    low, high = min(y_true.min(), y_pred.min()), max(y_true.max(), y_pred.max())
+    ax.plot([low, high], [low, high], "r--", label="perfect prediction")
+    ax.set_xlabel("Actual")
+    ax.set_ylabel("Predicted")
+    ax.set_title(title)
+    ax.legend()
+    save_fig(fig, filename)
