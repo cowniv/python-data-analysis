@@ -38,3 +38,13 @@ def save_fig(fig, filename):
     plt.close(fig)
     print(f"  saved {path.relative_to(ROOT)}")
 
+
+def regression_report(y_true, y_pred, label="model"):
+    """Print and return the usual regression metrics."""
+    mae = mean_absolute_error(y_true, y_pred)
+    rmse = mean_squared_error(y_true, y_pred) ** 0.5
+    r2 = r2_score(y_true, y_pred)
+    print(f"  {label}: R^2 = {r2:.3f} | MAE = {mae:,.2f} | RMSE = {rmse:,.2f}")
+    return {"r2": r2, "mae": mae, "rmse": rmse}
+
+
