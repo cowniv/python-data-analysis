@@ -16,3 +16,9 @@ python -m venv .venv
 .venv\Scripts\activate        # Windows (source .venv/bin/activate on Mac/Linux)
 pip install -r requirements.txt
 python insurance_analysis.py
+python mtcars_analysis.py
+```
+Charts are written to `figures/` (ignored by git, just rerun the scripts).
+
+### Findings
+- **Smoking is the biggest factor.** Smokers pay about **3.8×** more on average, and the regression gives smoking a coefficient of about **+23,600** while everything else is in the hundreds.
