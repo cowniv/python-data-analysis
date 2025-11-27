@@ -10,3 +10,9 @@ In Pattern Recognition we worked through these datasets in Jupyter notebooks. I 
 - `mtcars_analysis.py`: correlation heatmap, mpg vs weight line, multiple regression with 5-fold cross-validation, elbow method + k-means (k = 3)
 - `utils.py`: CSV loading, figure saving, R² / MAE / RMSE report, actual vs predicted plot
 
+### Run
+```bash
+python -m venv .venv
+.venv\Scripts\activate        # Windows (source .venv/bin/activate on Mac/Linux)
+pip install -r requirements.txt
+python insurance_analysis.py
