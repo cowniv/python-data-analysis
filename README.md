@@ -28,3 +28,8 @@ Charts are written to `figures/` (ignored by git, just rerun the scripts).
 - **K-means found 3 sensible groups:** heavy V8 muscle cars (~15 mpg, ~207 hp), light economy cars (~30 mpg), and mid-size cars in between.
 
 ### What I practiced
+- pandas: `groupby`, `pivot_table`, `pd.cut`, `get_dummies`
+- matplotlib: histograms, box plots, scatter plots, heatmaps with `imshow`
+- scikit-learn: `LinearRegression`, `train_test_split`, `cross_val_predict`, `StandardScaler`, `KMeans`
+- Reading regression metrics (R², MAE, RMSE) and coefficients
+- Turning notebook code into reusable modules
